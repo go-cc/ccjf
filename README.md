@@ -4,7 +4,7 @@
 [![MIT License](http://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GoDoc](https://godoc.org/github.com/go-cc/ccjf?status.svg)](http://godoc.org/github.com/go-cc/ccjf)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-cc/ccjf)](https://goreportcard.com/report/github.com/go-cc/ccjf)
-[![travis Status](https://travis-ci.org//go-cc/ccjf.svg?branch=master)](https://travis-ci.org/go-cc/ccjf)
+[![travis Status](https://travis-ci.org/go-cc/ccjf.svg?branch=master)](https://travis-ci.org/go-cc/ccjf)
 
 中文简繁互转工具
 
@@ -16,8 +16,9 @@
     - [$ ccjf jf](#-ccjf-jf)
     - [$ ccjf fj](#-ccjf-fj)
   - [Examples](#examples)
-- [Install](#install)
-  - [linux deb/rpm package](#linux-debrpm-package)
+  - [Install](#install)
+    - [linux deb/rpm package](#linux-debrpm-package)
+  - [Philosophy](#philosophy)
 
 # ccjf - Chinese-Character Jian<=>Fan converter
 
@@ -95,9 +96,26 @@ $ ccjf fj -i /tmp/ccin-ft.txt
 All patches welcome. 
 
 
-# Install
+## Install
 
 ### linux deb/rpm package
 
 Available at 
 https://github.com/go-cc/ccjf/releases
+
+## Philosophy
+
+`ccjf` is a simple, deterministic Chinese-Character Jian<=>Fan converter. I.e., it follows the famous Unix philosophy of "_do one thing and do it well_":
+
+- Simple - All it does is converting between Chinese Jian/Fan Characters
+  * it uses the ready-built two-way look-up dictionary
+  * and does nothing else
+  * thus it is super fast
+- Deterministic - The output will always been the same.
+  * the challenge of Jian/Fan converting is that there are cases that there is no one-to-one mapping between them -- One simplified character may be mapped to one or more traditional characters. The simple algorithm will always pick the first choice.
+  * Thus for cases that it picks wrong, it will always pick the same wrong choice.
+  * However, looking at it the other way, the same simplified character will always be converted to the same traditional character. I.e., the conversion will NOT be changed according to the context it is in. This is deterministic.
+- Accurate - it thrives to cover every possible Jian<=>Fan converting cases, by standing on the giant's shoulder. The Jian<=>Fan converting table it is relying on is [the one from OpenCC](https://github.com/BYVoid/OpenCC/tree/master/data/dictionary/STCharacters.txt). It is the most comprehensive and most up-to-date one I found so far.
+
+
+In essence, the `ccjf` is a _character_ based converter. This is important to me as I don't want my converter to convert "悉尼" into "雪梨", or "总线" into "會流排". I rely on that so as to build my [多音字词语表](https://github.com/go-cc/cc-table/blob/master/text/tools/duoyinzi/duoyinzi-prep.md) correctly. If you do need such _phrase_ or _meaning_ based converter, take a look at [OpenCC](https://github.com/BYVoid/OpenCC). 
